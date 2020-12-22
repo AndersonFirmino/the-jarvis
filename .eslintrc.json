@@ -6,7 +6,8 @@
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -17,10 +18,10 @@
     "sourceType": "module"
   },
   "plugins": [
+    "eslint-plugin-import-helpers",
     "react",
     "@typescript-eslint",
-    "plugin:prettier/recommended",
-    "eslint-plugin-import-helpers"
+    "prettier"
   ],
   "rules": {
     "indent": [
@@ -62,6 +63,7 @@
           "ignoreCase": true
         }
       }
-    ]
+    ],
+    "prettier/prettier": "error"
   }
 }
