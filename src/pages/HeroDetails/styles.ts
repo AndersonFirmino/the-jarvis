@@ -11,8 +11,6 @@ export const HeroContainer = withStyles({
     width: '100%',
     alignItems: 'center',
     flexDirection: 'column',
-    // background: (props: { thumbnail: string }) =>
-    //   `rgba(0,0,0, .65) url(${props.thumbnail}) no-repeat center center fixed`,
     backgroundImage: (props: { thumbnail: string }) => `url(${props.thumbnail})`,
     backgroundPosition: 'center center',
     backgroundAttachment: 'fixed',
