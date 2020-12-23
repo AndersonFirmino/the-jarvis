@@ -6,6 +6,7 @@ interface InputDto {
   defaultValue?: number | string
   error: string
   label: string
+  disabled?: boolean
 }
 
 export default InputDto

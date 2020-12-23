@@ -5,7 +5,7 @@ import InputDto from './Input.dto'
 
 import { Error, InputContainer, TextField } from './styles'
 
-const Input: React.FC<InputDto> = ({ name, control, defaultValue = '', error, label }) => {
+const Input: React.FC<InputDto> = ({ name, control, defaultValue = '', error, label, disabled }) => {
   return (
     <Controller
       name={name}
@@ -19,6 +19,7 @@ const Input: React.FC<InputDto> = ({ name, control, defaultValue = '', error, la
             variant="outlined"
             onBlur={onBlur}
             onChange={onChange}
+            disabled={disabled}
             value={value}
           />
           {!!error && <Error>{error}</Error>}

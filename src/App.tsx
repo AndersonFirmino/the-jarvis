@@ -1,13 +1,17 @@
+import { MuiThemeProvider } from '@material-ui/core'
 import React from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 
-import Routes from './routes'
+import Routes from 'src/routes'
+import theme from 'src/styles/theme'
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <Routes />
-    </Router>
+    <MuiThemeProvider theme={theme}>
+      <Router>
+        <Routes />
+      </Router>
+    </MuiThemeProvider>
   )
 }
 
