@@ -4,20 +4,17 @@ import Container from '../Container'
 
 import { InputContainerDto } from './Input.dto'
 
-export const TextField = withStyles({
+export const TextField = withStyles((theme) => ({
   root: {
-    color: 'red',
+    '& .MuiInput-input': {
+      color: (props: InputContainerDto) =>
+        props.error ? theme.palette.error.main : theme.palette.primary.contrastText,
+    },
   },
-})(MTextField)
+}))(MTextField)
 
-export const Error = withStyles({
-  root: {
-    color: 'red',
-  },
-})(Typography)
+export const Error = withStyles({})(Typography)
 
-export const InputContainer = withStyles({
-  root: {
-    backgroundColor: (props: InputContainerDto) => (props.error ? 'red' : 'green'),
-  },
-})(Container)
+export const InputContainer = withStyles(() => ({
+  root: {},
+}))(Container)
