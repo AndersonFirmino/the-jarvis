@@ -1,5 +1,12 @@
 import React from 'react'
 
-const Loading: React.FC = () => <div>Loading</div>
+import { ImageContainer, LoadingContainer, LoadingText } from './styles'
+
+const Loading: React.FC = () => (
+  <LoadingContainer>
+    <ImageContainer />
+    <LoadingText>Carregando... aguarde</LoadingText>
+  </LoadingContainer>
+)
 
 export default Loading
