@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import React, { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useHistory } from 'react-router-dom'
 import * as Yup from 'yup'
 
 import { Input } from 'src/components'
@@ -15,6 +16,7 @@ const validationSchema = Yup.object().shape({
 
 const Start: React.FC = () => {
   const isMountedRef = useIsMountedRef()
+  const history = useHistory()
   const [loading, setLoading] = useState<boolean>(false)
   const { control, errors, handleSubmit } = useForm({ resolver: yupResolver(validationSchema), mode: 'onTouched' })
 
@@ -24,7 +26,11 @@ const Start: React.FC = () => {
         try {
           setLoading(true)
           const result = await api.get('/v1/public/characters', { params: { name: data.search } })
-          console.log(result)
+          history.push('hero-details', {
+            name: result.data.data.results[0].name,
+            thumbnail: result.data.data.results[0].thumbnail,
+            description: result.data.data.results[0].description,
+          })
         } catch (e) {
           alert(`Herói ${data.search} não encontrado!`)
         } finally {
