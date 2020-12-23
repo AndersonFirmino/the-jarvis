@@ -50,7 +50,9 @@
             "/^src/"
           ],
           [
-            "parent",
+            "parent"
+          ],
+          [
             "sibling",
             "index"
           ],
