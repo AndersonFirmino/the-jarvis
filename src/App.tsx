@@ -1,17 +1,17 @@
+import { MuiThemeProvider } from '@material-ui/core'
 import React from 'react'
+import { BrowserRouter as Router } from 'react-router-dom'
+
+import Routes from 'src/routes'
+import theme from 'src/styles/theme'
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
-    </div>
+    <MuiThemeProvider theme={theme}>
+      <Router>
+        <Routes />
+      </Router>
+    </MuiThemeProvider>
   )
 }
 
