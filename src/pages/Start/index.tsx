@@ -8,7 +8,7 @@ import { Input } from 'src/components'
 import { useIsMountedRef } from 'src/hooks/useIsMountedRef'
 import api from 'src/services/api'
 
-import { Form, StartContainer, SubmitButton } from './styles'
+import { CardContainer, FormContainer, StartContainer, SubmitButton } from './styles'
 
 const validationSchema = Yup.object().shape({
   search: Yup.string().required('Preencha o nome do herói!'),
@@ -43,18 +43,25 @@ const Start: React.FC = () => {
 
   return (
     <StartContainer>
-      <Form variant="outlined">
-        <Input
-          control={control}
-          name="search"
-          error={errors?.search?.message}
-          label="Digite o nome do herói"
-          disabled={loading}
-        />
-        <SubmitButton color="primary" variant="contained" onClick={handleSubmit(handleSubmitButton)} disabled={loading}>
-          Buscar herói
-        </SubmitButton>
-      </Form>
+      <CardContainer variant="outlined">
+        <FormContainer>
+          <Input
+            control={control}
+            name="search"
+            error={errors?.search?.message}
+            label="Digite o nome do herói"
+            disabled={loading}
+          />
+          <SubmitButton
+            color="primary"
+            variant="contained"
+            onClick={handleSubmit(handleSubmitButton)}
+            disabled={loading}
+          >
+            Buscar herói
+          </SubmitButton>
+        </FormContainer>
+      </CardContainer>
     </StartContainer>
   )
 }

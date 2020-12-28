@@ -16,6 +16,7 @@ export const Error = withStyles((theme) => ({
 export const InputContainer = withStyles(() => ({
   root: {
     display: 'flex',
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',

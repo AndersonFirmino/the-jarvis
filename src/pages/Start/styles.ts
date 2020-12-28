@@ -13,21 +13,32 @@ export const StartContainer = withStyles({
   },
 })(Container)
 
-export const Form = withStyles({
+export const CardContainer = withStyles({
   root: {
-    width: '275px',
-    height: '275px',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
+    width: '80%',
+    height: '80%',
+    justifyContent: 'space-around',
     alignItems: 'center',
   },
 })(Card)
 
+export const FormContainer = withStyles({
+  root: {
+    display: 'flex',
+    height: 200,
+    width: '95%',
+    justifyContent: 'space-around',
+    alignItems: 'flex-start',
+  },
+})(Container)
+
 export const SubmitButton = withStyles({
   root: {
-    width: '80%',
-    margin: '15px',
+    width: '10%',
+    height: 50,
+    margin: '0 15px',
     padding: '7px 0',
   },
 })(Button)
