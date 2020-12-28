@@ -1,4 +1,4 @@
-import { Button, Paper, withStyles } from '@material-ui/core'
+import { Button, Card, withStyles } from '@material-ui/core'
 
 import { Container } from 'src/components'
 
@@ -13,7 +13,7 @@ export const StartContainer = withStyles({
   },
 })(Container)
 
-export const Form = withStyles((theme) => ({
+export const Form = withStyles({
   root: {
     width: '275px',
     height: '275px',
@@ -21,16 +21,13 @@ export const Form = withStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: theme.palette.primary.main,
   },
-}))(Paper)
+})(Card)
 
-export const SubmitButton = withStyles((theme) => ({
+export const SubmitButton = withStyles({
   root: {
-    backgroundColor: theme.palette.primary.dark,
-    color: theme.palette.primary.contrastText,
     width: '80%',
     margin: '15px',
     padding: '7px 0',
   },
-}))(Button)
+})(Button)

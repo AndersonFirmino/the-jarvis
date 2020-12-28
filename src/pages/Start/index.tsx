@@ -51,7 +51,7 @@ const Start: React.FC = () => {
           label="Digite o nome do herói"
           disabled={loading}
         />
-        <SubmitButton variant="contained" onClick={handleSubmit(handleSubmitButton)} disabled={loading}>
+        <SubmitButton color="primary" variant="contained" onClick={handleSubmit(handleSubmitButton)} disabled={loading}>
           Buscar herói
         </SubmitButton>
       </Form>

@@ -1,14 +1,11 @@
 import { createMuiTheme } from '@material-ui/core'
 
 const theme = createMuiTheme({
+  shape: {
+    borderRadius: 12,
+  },
   palette: {
-    primary: {
-      main: '#131723',
-      dark: 'black',
-    },
-    secondary: {
-      main: '#1E222F',
-    },
+    type: 'dark',
   },
 })
 
