@@ -1,11 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useHistory } from 'react-router-dom'
 import * as Yup from 'yup'
 
 import { Input } from 'src/components'
 import { useIsMountedRef } from 'src/hooks/useIsMountedRef'
+import { StartDto } from 'src/pages/Start/Start.dto'
 import api from 'src/services/api'
 
 import { CardContainer, FormContainer, StartContainer, SubmitButton } from './styles'
@@ -16,21 +16,34 @@ const validationSchema = Yup.object().shape({
 
 const Start: React.FC = () => {
   const isMountedRef = useIsMountedRef()
-  const history = useHistory()
   const [loading, setLoading] = useState<boolean>(false)
+  const [setHeroes] = useState<StartDto[]>([])
+
   const { control, errors, handleSubmit } = useForm({ resolver: yupResolver(validationSchema), mode: 'onTouched' })
+
+  const getHeroes = useCallback(
+    async (nameStartsWith?: string) => {
+      const results = await api.get('/v1/public/characters', { params: { nameStartsWith } })
+      if (isMountedRef) {
+        setHeroes(results.data.data.results)
+      }
+    },
+    [isMountedRef],
+  )
+
+  useEffect(() => {
+    setLoading(true)
+    getHeroes().finally(() => {
+      setLoading(false)
+    })
+  }, [isMountedRef])
 
   const handleSubmitButton = useCallback(
     async (data) => {
       if (isMountedRef) {
         try {
           setLoading(true)
-          const result = await api.get('/v1/public/characters', { params: { name: data.search } })
-          history.push('hero-details', {
-            name: result.data.data.results[0].name,
-            thumbnail: result.data.data.results[0].thumbnail,
-            description: result.data.data.results[0].description,
-          })
+          await getHeroes(data.search)
         } catch (e) {
           alert(`Herói ${data.search} não encontrado!`)
         } finally {

@@ -36,7 +36,7 @@ export const FormContainer = withStyles({
 
 export const SubmitButton = withStyles({
   root: {
-    width: '10%',
+    width: '15%',
     height: 50,
     margin: '0 15px',
     padding: '7px 0',
