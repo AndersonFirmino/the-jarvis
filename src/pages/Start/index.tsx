@@ -1,29 +1,41 @@
-import { yupResolver } from '@hookform/resolvers/yup'
+import { ColDef, DataGrid } from '@material-ui/data-grid'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import * as Yup from 'yup'
 
 import { Input } from 'src/components'
 import { useIsMountedRef } from 'src/hooks/useIsMountedRef'
 import { StartDto } from 'src/pages/Start/Start.dto'
 import api from 'src/services/api'
 
-import { CardContainer, FormContainer, StartContainer, SubmitButton } from './styles'
-
-const validationSchema = Yup.object().shape({
-  search: Yup.string().required('Preencha o nome do herói!'),
-})
+import { CardContainer, FormContainer, GridContainer, ImageBackground, StartContainer, SubmitButton } from './styles'
 
 const Start: React.FC = () => {
   const isMountedRef = useIsMountedRef()
   const [loading, setLoading] = useState<boolean>(false)
-  const [setHeroes] = useState<StartDto[]>([])
-
-  const { control, errors, handleSubmit } = useForm({ resolver: yupResolver(validationSchema), mode: 'onTouched' })
+  const [heroes, setHeroes] = useState<StartDto[]>([])
+  const { control, errors, handleSubmit } = useForm({ mode: 'onTouched' })
+  const columns: ColDef[] = [
+    {
+      field: 'image',
+      headerName: '-',
+      width: 200,
+      renderCell: (params) => {
+        console.log(params)
+        return <ImageBackground thumbnail={params.row.thumbnail.path + '.' + params.row.thumbnail.extension} />
+      },
+    },
+    { field: 'name', headerName: 'Name', width: 700 },
+  ]
 
   const getHeroes = useCallback(
     async (nameStartsWith?: string) => {
-      const results = await api.get('/v1/public/characters', { params: { nameStartsWith } })
+      let results
+      if (nameStartsWith === '') {
+        results = await api.get('/v1/public/characters')
+      } else {
+        results = await api.get('/v1/public/characters', { params: { nameStartsWith } })
+      }
+
       if (isMountedRef) {
         setHeroes(results.data.data.results)
       }
@@ -74,6 +86,9 @@ const Start: React.FC = () => {
             Buscar herói
           </SubmitButton>
         </FormContainer>
+        <GridContainer>
+          <DataGrid rows={heroes} columns={columns} checkboxSelection={false} autoPageSize />
+        </GridContainer>
       </CardContainer>
     </StartContainer>
   )

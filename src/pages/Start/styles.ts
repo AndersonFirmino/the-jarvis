@@ -27,9 +27,7 @@ export const CardContainer = withStyles({
 export const FormContainer = withStyles({
   root: {
     display: 'flex',
-    height: 200,
     width: '95%',
-    justifyContent: 'space-around',
     alignItems: 'flex-start',
   },
 })(Container)
@@ -42,3 +40,25 @@ export const SubmitButton = withStyles({
     padding: '7px 0',
   },
 })(Button)
+
+export const ImageBackground = withStyles({
+  root: {
+    display: 'flex',
+    flex: 1,
+    width: 15,
+    height: 50,
+    backgroundImage: (props: { thumbnail: string }) => `url(${props.thumbnail})`,
+    backgroundPosition: 'center center',
+    backgroundBlendMode: 'darken',
+    backgroundSize: '100% 100%',
+    backgroundRepeat: 'no-repeat',
+  },
+})(Container)
+
+export const GridContainer = withStyles({
+  root: {
+    display: 'flex',
+    height: '80%',
+    width: '95%',
+  },
+})(Container)
