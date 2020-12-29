@@ -1,6 +1,9 @@
+import { IconButton } from '@material-ui/core'
 import { ColDef, DataGrid } from '@material-ui/data-grid'
+import { AssignmentInd } from '@material-ui/icons'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useHistory } from 'react-router-dom'
 
 import { Input } from 'src/components'
 import { useIsMountedRef } from 'src/hooks/useIsMountedRef'
@@ -10,6 +13,7 @@ import api from 'src/services/api'
 import { CardContainer, FormContainer, GridContainer, ImageBackground, StartContainer, SubmitButton } from './styles'
 
 const Start: React.FC = () => {
+  const history = useHistory()
   const isMountedRef = useIsMountedRef()
   const totalItemsPage = 6
   const [page, setPage] = useState<number>(1)
@@ -27,7 +31,31 @@ const Start: React.FC = () => {
       ),
     },
     { field: 'name', headerName: 'Name', width: 700 },
+    {
+      field: 'buttons',
+      headerName: 'Actions',
+      width: 150,
+      renderCell: (params) => {
+        console.log(params)
+        return (
+          <IconButton
+            aria-label="Informações dos campeões (heroes)"
+            onClick={() => handleHeroButton(params.row.name, params.row.thumbnail, params.row.description)}
+          >
+            <AssignmentInd />
+          </IconButton>
+        )
+      },
+    },
   ]
+
+  const handleHeroButton = useCallback((name, thumbnail, description) => {
+    history.push('hero-details', {
+      name,
+      thumbnail,
+      description,
+    })
+  }, [])
 
   const getHeroes = useCallback(
     async (nameStartsWith?: string, offset?: number) => {
