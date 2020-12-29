@@ -11,6 +11,9 @@ import { CardContainer, FormContainer, GridContainer, ImageBackground, StartCont
 
 const Start: React.FC = () => {
   const isMountedRef = useIsMountedRef()
+  const totalItemsPage = 6
+  const [page, setPage] = useState<number>(1)
+  const [rowCount, setRowCount] = useState<number>()
   const [loading, setLoading] = useState<boolean>(false)
   const [heroes, setHeroes] = useState<StartDto[]>([])
   const { control, errors, handleSubmit } = useForm({ mode: 'onTouched' })
@@ -19,25 +22,25 @@ const Start: React.FC = () => {
       field: 'image',
       headerName: '-',
       width: 200,
-      renderCell: (params) => {
-        console.log(params)
-        return <ImageBackground thumbnail={params.row.thumbnail.path + '.' + params.row.thumbnail.extension} />
-      },
+      renderCell: (params) => (
+        <ImageBackground thumbnail={params.row.thumbnail.path + '.' + params.row.thumbnail.extension} />
+      ),
     },
     { field: 'name', headerName: 'Name', width: 700 },
   ]
 
   const getHeroes = useCallback(
-    async (nameStartsWith?: string) => {
+    async (nameStartsWith?: string, offset?: number) => {
       let results
       if (nameStartsWith === '') {
-        results = await api.get('/v1/public/characters')
+        results = await api.get('/v1/public/characters', { params: { offset, limit: totalItemsPage } })
       } else {
-        results = await api.get('/v1/public/characters', { params: { nameStartsWith } })
+        results = await api.get('/v1/public/characters', { params: { nameStartsWith, offset, limit: totalItemsPage } })
       }
 
       if (isMountedRef) {
         setHeroes(results.data.data.results)
+        setRowCount(results.data.data.total)
       }
     },
     [isMountedRef],
@@ -66,6 +69,16 @@ const Start: React.FC = () => {
     [isMountedRef],
   )
 
+  const handlePageChange = useCallback(async (params) => {
+    try {
+      setLoading(true)
+      setPage(params.page)
+      await getHeroes(undefined, params.page * totalItemsPage)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
   return (
     <StartContainer>
       <CardContainer variant="outlined">
@@ -87,7 +100,17 @@ const Start: React.FC = () => {
           </SubmitButton>
         </FormContainer>
         <GridContainer>
-          <DataGrid rows={heroes} columns={columns} checkboxSelection={false} autoPageSize />
+          <DataGrid
+            rows={heroes}
+            page={page}
+            rowCount={rowCount}
+            pageSize={totalItemsPage}
+            columns={columns}
+            checkboxSelection={false}
+            paginationMode="server"
+            onPageChange={handlePageChange}
+            loading={loading}
+          />
         </GridContainer>
       </CardContainer>
     </StartContainer>
