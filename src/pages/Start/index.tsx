@@ -1,6 +1,6 @@
 import { IconButton } from '@material-ui/core'
 import { ColDef, DataGrid } from '@material-ui/data-grid'
-import { AssignmentInd } from '@material-ui/icons'
+import { AssignmentInd, ImportContacts } from '@material-ui/icons'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useHistory } from 'react-router-dom'
@@ -36,18 +36,31 @@ const Start: React.FC = () => {
       headerName: 'Actions',
       width: 150,
       renderCell: (params) => {
-        console.log(params)
         return (
-          <IconButton
-            aria-label="Informações dos campeões (heroes)"
-            onClick={() => handleHeroButton(params.row.name, params.row.thumbnail, params.row.description)}
-          >
-            <AssignmentInd />
-          </IconButton>
+          <>
+            <IconButton
+              aria-label="Informações dos campeões (heroes)"
+              onClick={() => handleHeroButton(params.row.name, params.row.thumbnail, params.row.description)}
+            >
+              <AssignmentInd />
+            </IconButton>
+            <IconButton
+              aria-label="Listagem das comics do campeão (herói)"
+              onClick={() => handleComicsButton(params.row.id)}
+            >
+              <ImportContacts />
+            </IconButton>
+          </>
         )
       },
     },
   ]
+
+  const handleComicsButton = useCallback((id) => {
+    history.push('comics', {
+      id,
+    })
+  }, [])
 
   const handleHeroButton = useCallback((name, thumbnail, description) => {
     history.push('hero-details', {
@@ -87,8 +100,6 @@ const Start: React.FC = () => {
         try {
           setLoading(true)
           await getHeroes(data.search)
-        } catch (e) {
-          alert(`Herói ${data.search} não encontrado!`)
         } finally {
           setLoading(false)
         }

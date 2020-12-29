@@ -12,6 +12,11 @@ const paths = [
     component: lazy(() => import('src/pages/HeroDetails')),
   },
   {
+    exact: true,
+    path: '/comics',
+    component: lazy(() => import('src/pages/Comics')),
+  },
+  {
     path: '/',
     component: lazy(() => import('src/pages/NotFound')),
   },
