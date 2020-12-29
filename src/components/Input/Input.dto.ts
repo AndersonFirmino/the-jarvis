@@ -10,7 +10,3 @@ interface InputDto {
 }
 
 export default InputDto
-
-export interface InputContainerDto {
-  error: boolean
-}

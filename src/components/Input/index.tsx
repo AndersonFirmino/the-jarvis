@@ -14,6 +14,7 @@ const Input: React.FC<InputDto> = ({ name, control, defaultValue = '', error, la
       render={({ onBlur, onChange, value }) => (
         <InputContainer>
           <TextField
+            fullWidth
             label={label}
             error={!!error}
             variant="outlined"

@@ -2,23 +2,9 @@ import { TextField as MTextField, Typography, withStyles } from '@material-ui/co
 
 import Container from '../Container'
 
-import { InputContainerDto } from './Input.dto'
-
-export const TextField = withStyles((theme) => ({
-  root: {
-    '& .MuiInputBase-input': {
-      color: (props: InputContainerDto) =>
-        props.error ? theme.palette.error.main : theme.palette.primary.contrastText,
-    },
-    '& .MuiInputBase-root': {
-      backgroundColor: theme.palette.secondary.main,
-    },
-    '& .MuiFormLabel-root': {
-      color: (props: InputContainerDto) =>
-        props.error ? theme.palette.error.main : theme.palette.primary.contrastText,
-    },
-  },
-}))(MTextField)
+export const TextField = withStyles({
+  root: {},
+})(MTextField)
 
 export const Error = withStyles((theme) => ({
   root: {
@@ -30,6 +16,7 @@ export const Error = withStyles((theme) => ({
 export const InputContainer = withStyles(() => ({
   root: {
     display: 'flex',
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
