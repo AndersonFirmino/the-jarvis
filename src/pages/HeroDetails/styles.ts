@@ -1,4 +1,4 @@
-import { Typography, withStyles } from '@material-ui/core'
+import { Button, Typography, withStyles } from '@material-ui/core'
 
 import { Container } from 'src/components'
 
@@ -44,3 +44,12 @@ export const TextContainer = withStyles(() => ({
     flexDirection: 'column',
   },
 }))(Container)
+
+export const BackButton = withStyles({
+  root: {
+    width: '15%',
+    height: 50,
+    margin: '0 15px',
+    padding: '7px 0',
+  },
+})(Button)
