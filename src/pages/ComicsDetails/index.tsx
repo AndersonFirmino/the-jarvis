@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 
-import { StartDto } from 'src/pages/Start/Start.dto'
+import { ComicsDto } from 'src/pages/Comics/Comics.dto'
 
-import { Description, HeroContainer, Name, TextContainer, BackButton } from './styles'
+import { BackButton, Description, HeroContainer, TextContainer, Title } from './styles'
 
-const HeroDetails: React.FC = () => {
-  const { state } = useLocation<StartDto>()
+const ComicsDetails: React.FC = () => {
+  const { state } = useLocation<ComicsDto>()
   const { title, thumbnail, description } = state
   const history = useHistory()
 
@@ -20,11 +20,11 @@ const HeroDetails: React.FC = () => {
         <BackButton color="primary" variant="contained" onClick={handleBackButton}>
           Voltar
         </BackButton>
-        <Name>{title}</Name>
+        <Title>{title}</Title>
         <Description>{description}</Description>
       </TextContainer>
     </HeroContainer>
   )
 }
 
-export default HeroDetails
+export default ComicsDetails

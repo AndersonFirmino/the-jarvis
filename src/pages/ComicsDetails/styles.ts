@@ -19,7 +19,7 @@ export const HeroContainer = withStyles({
   },
 })(Container)
 
-export const Name = withStyles((theme) => ({
+export const Title = withStyles((theme) => ({
   root: {
     color: theme.palette.primary.contrastText,
     fontSize: 62,

@@ -1,25 +1,29 @@
 import { IconButton } from '@material-ui/core'
 import { ColDef, DataGrid } from '@material-ui/data-grid'
-import { AssignmentInd, ImportContacts } from '@material-ui/icons'
+import { AssignmentInd } from '@material-ui/icons'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 
 import { Input } from 'src/components'
-import { useIsMountedRef } from 'src/hooks/useIsMountedRef'
-import { StartDto } from 'src/pages/Start/Start.dto'
+import { useIsMountedRef } from 'src/hooks'
+import { ComicsDto, ComicsStateDto } from 'src/pages/Comics/Comics.dto'
+import { ImageBackground } from 'src/pages/Start/styles'
 import api from 'src/services/api'
 
-import { CardContainer, FormContainer, GridContainer, ImageBackground, StartContainer, SubmitButton } from './styles'
+import { CardContainer, FormContainer, GridContainer, StartContainer, SubmitButton } from './styles'
 
-const Start: React.FC = () => {
+const Comics: React.FC = () => {
+  const { state } = useLocation<ComicsStateDto>()
+  const { id } = state
   const history = useHistory()
   const isMountedRef = useIsMountedRef()
   const totalItemsPage = 6
   const [page, setPage] = useState<number>(1)
   const [rowCount, setRowCount] = useState<number>()
+  const [search, setSearch] = useState<string>()
   const [loading, setLoading] = useState<boolean>(false)
-  const [heroes, setHeroes] = useState<StartDto[]>([])
+  const [comics, setComics] = useState<ComicsDto[]>([])
   const { control, errors, handleSubmit } = useForm({ mode: 'onTouched' })
   const columns: ColDef[] = [
     {
@@ -30,7 +34,7 @@ const Start: React.FC = () => {
         <ImageBackground thumbnail={params.row.thumbnail.path + '.' + params.row.thumbnail.extension} />
       ),
     },
-    { field: 'name', headerName: 'Name', width: 700 },
+    { field: 'title', headerName: 'Título', width: 700 },
     {
       field: 'buttons',
       headerName: 'Actions',
@@ -40,15 +44,9 @@ const Start: React.FC = () => {
           <>
             <IconButton
               aria-label="Informações dos campeões (heroes)"
-              onClick={() => handleHeroButton(params.row.name, params.row.thumbnail, params.row.description)}
+              onClick={() => handleComicButton(params.row.title, params.row.thumbnail, params.row.description)}
             >
               <AssignmentInd />
-            </IconButton>
-            <IconButton
-              aria-label="Listagem das comics do campeão (herói)"
-              onClick={() => handleComicsButton(params.row.id)}
-            >
-              <ImportContacts />
             </IconButton>
           </>
         )
@@ -56,77 +54,75 @@ const Start: React.FC = () => {
     },
   ]
 
-  const handleComicsButton = useCallback((id) => {
-    history.push('comics', {
-      id,
-    })
-  }, [])
-
-  const handleHeroButton = useCallback((name, thumbnail, description) => {
+  const handleComicButton = useCallback((title, thumbnail, description) => {
     history.push('hero-details', {
-      name,
+      title,
       thumbnail,
       description,
     })
   }, [])
 
-  const getHeroes = useCallback(
-    async (nameStartsWith?: string, offset?: number) => {
-      let results
-      if (nameStartsWith === '') {
-        results = await api.get('/v1/public/characters', { params: { offset, limit: totalItemsPage } })
-      } else {
-        results = await api.get('/v1/public/characters', { params: { nameStartsWith, offset, limit: totalItemsPage } })
-      }
+  useEffect(() => {
+    setLoading(true)
+    getComics().finally(() => setLoading(false))
+  }, [search])
 
+  const handlePageChange = useCallback(
+    async (params) => {
+      try {
+        setLoading(true)
+        setPage(params.page)
+        await getComics(params.page * totalItemsPage)
+      } finally {
+        setLoading(false)
+      }
+    },
+    [search],
+  )
+
+  const getComics = useCallback(
+    async (offset?: number) => {
+      let results
+      if (!search || search === '') {
+        results = await api.get(`/v1/public/characters/${id}/comics`, { params: { offset, limit: totalItemsPage } })
+      } else {
+        results = await api.get(`/v1/public/characters/${id}/comics`, {
+          params: { titleStartsWith: search, offset, limit: totalItemsPage },
+        })
+      }
       if (isMountedRef) {
-        setHeroes(results.data.data.results)
+        setComics(results.data.data.results)
         setRowCount(results.data.data.total)
       }
     },
-    [isMountedRef],
+    [isMountedRef, search],
   )
-
-  useEffect(() => {
-    setLoading(true)
-    getHeroes().finally(() => {
-      setLoading(false)
-    })
-  }, [isMountedRef])
 
   const handleSubmitButton = useCallback(
     async (data) => {
       if (isMountedRef) {
-        try {
-          setLoading(true)
-          await getHeroes(data.search)
-        } finally {
-          setLoading(false)
-        }
+        setSearch(data.search)
       }
     },
     [isMountedRef],
   )
 
-  const handlePageChange = useCallback(async (params) => {
-    try {
-      setLoading(true)
-      setPage(params.page)
-      await getHeroes(undefined, params.page * totalItemsPage)
-    } finally {
-      setLoading(false)
-    }
+  const handleBackButton = useCallback(() => {
+    history.goBack()
   }, [])
 
   return (
     <StartContainer>
       <CardContainer variant="outlined">
         <FormContainer>
+          <SubmitButton color="primary" variant="contained" onClick={handleBackButton} disabled={loading}>
+            Voltar
+          </SubmitButton>
           <Input
             control={control}
             name="search"
             error={errors?.search?.message}
-            label="Digite o nome do herói"
+            label="Digite o título da comic"
             disabled={loading}
           />
           <SubmitButton
@@ -135,14 +131,15 @@ const Start: React.FC = () => {
             onClick={handleSubmit(handleSubmitButton)}
             disabled={loading}
           >
-            Buscar herói
+            Buscar comic
           </SubmitButton>
         </FormContainer>
         <GridContainer>
           <DataGrid
-            rows={heroes}
+            rows={comics}
             page={page}
             rowCount={rowCount}
+            pagination
             pageSize={totalItemsPage}
             columns={columns}
             checkboxSelection={false}
@@ -156,4 +153,4 @@ const Start: React.FC = () => {
   )
 }
 
-export default Start
+export default Comics
