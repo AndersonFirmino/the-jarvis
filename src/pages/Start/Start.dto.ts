@@ -1,6 +1,6 @@
 export interface StartDto {
   id: number
-  name: string
+  title: string
   thumbnail: {
     extension: string
     path: string

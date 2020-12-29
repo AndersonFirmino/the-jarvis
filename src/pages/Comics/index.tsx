@@ -1,4 +1,6 @@
+import { IconButton } from '@material-ui/core'
 import { ColDef, DataGrid } from '@material-ui/data-grid'
+import { AssignmentInd } from '@material-ui/icons'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useHistory, useLocation } from 'react-router-dom'
@@ -33,7 +35,32 @@ const Comics: React.FC = () => {
       ),
     },
     { field: 'title', headerName: 'Título', width: 700 },
+    {
+      field: 'buttons',
+      headerName: 'Actions',
+      width: 150,
+      renderCell: (params) => {
+        return (
+          <>
+            <IconButton
+              aria-label="Informações dos campeões (heroes)"
+              onClick={() => handleComicButton(params.row.title, params.row.thumbnail, params.row.description)}
+            >
+              <AssignmentInd />
+            </IconButton>
+          </>
+        )
+      },
+    },
   ]
+
+  const handleComicButton = useCallback((title, thumbnail, description) => {
+    history.push('hero-details', {
+      title,
+      thumbnail,
+      description,
+    })
+  }, [])
 
   useEffect(() => {
     setLoading(true)

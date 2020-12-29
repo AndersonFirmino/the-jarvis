@@ -1,8 +1,11 @@
 export interface ComicsDto {
   id: number
-  thumbnail: string
+  thumbnail: {
+    extension: string
+    path: string
+  }
   description: string
-  name: string
+  title: string
 }
 
 export interface ComicsStateDto {

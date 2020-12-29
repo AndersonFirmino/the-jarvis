@@ -17,6 +17,11 @@ const paths = [
     component: lazy(() => import('src/pages/Comics')),
   },
   {
+    exact: true,
+    path: '/comics-details',
+    component: lazy(() => import('src/pages/ComicsDetails')),
+  },
+  {
     path: '/',
     component: lazy(() => import('src/pages/NotFound')),
   },
